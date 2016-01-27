@@ -51,3 +51,4 @@ Endpoints:
     Backend: /health
     Options:
       health: true
+Source-Url: https://github.com/tkislan/openshift-cartridge-nodejs/archive/master.zip
