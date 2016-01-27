@@ -3,7 +3,8 @@
 source $OPENSHIFT_CARTRIDGE_SDK_BASH
 source $HOME/nodejs/lib/util
 
-START_COMMAND=$(node -e "var p = require('$OPENSHIFT_REPO_DIR/package.json'); console.log(p.scripts.start);")
+BUILD_COMMAND=$(node -e "var p = require('$OPENSHIFT_REPO_DIR/package.json'); console.log(p.scripts['build']);")
+START_COMMAND=$(node -e "var p = require('$OPENSHIFT_REPO_DIR/package.json'); console.log(p.scripts['start-prod']);")
 
 function is_running() {
   if [ ! -z "$(ps -ef | grep "$START_COMMAND" | grep -v grep)" ]; then
@@ -39,6 +40,7 @@ function start() {
     client_message 'Starting Node.js application...'
     local INIT_DIR=`pwd`
     cd ${OPENSHIFT_REPO_DIR}
+    ${BUILD_COMMAND}
     nohup ${START_COMMAND} |& /usr/bin/logshifter -tag nodejs &
     cd ${INIT_DIR}
     i=0
